@@ -23,18 +23,22 @@ const App = () => {
     const getImages = async () => {
       setLoading(true);
       setError(null); 
-      try {
-        const data = await fetchImages(query, page);
-        setImages(prevImages => [...prevImages, ...data.results]);
+          try {
+        const data = await fetchImages(query, page)
+        if (data.results.length === 0) {
+          setError('No images found. Please try another search term.')
+        } else {
+          setImages((prev) => [...prev, ...data.results])
+        }
       } catch (error) {
-        setError('Failed to fetch images'); 
+        setError('Something went wrong. Please try again later.')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    getImages();
-  }, [query, page]);
+    getImages()
+  }, [query, page])
 
   const handleSearch = searchQuery => {
     setQuery(searchQuery);
